@@ -10,7 +10,7 @@ function Post( { post }) {
       {/* <img alt={description} src={`https:${file.url}`} /> */}
       <header>
         <h2>{title}</h2>
-        <div class="description">
+        <div className="description">
          <ReactMarkdown source={description} />
         </div>
         <p>slug: {slug}</p>

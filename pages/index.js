@@ -1,8 +1,11 @@
+import { fetchEntries } from 'util/contentfulPosts'
+
 import Head from 'next/head'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
+import Post from '@components/Post'
 
-export default function Home() {
+export default function Home({ posts }) {
   return (
     <div className="container">
       <Head>
@@ -12,29 +15,21 @@ export default function Home() {
 
       <main>
         <Header title="Welcome to my app!" />
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
+        <h1>Blog Posts</h1>
+        <div className="posts">
+          {posts.map((post) => {
+            return <Post key={post.publishDate} post={post} />
+          })}
+        </div>
       </main>
 
       <Footer />
 
       <style jsx>{`
         .container {
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
+          max-width: 1200px;
+          padding: 15px;
+          margin: 0 auto;
         }
 
         code {
@@ -57,7 +52,34 @@ export default function Home() {
         * {
           box-sizing: border-box;
         }
+
+        article {
+          padding-bottom: 20px;
+          margin-bottom: 20px;
+          border-bottom: solid 3px #ddd;
+        }
+
+        .description {
+          font-style: italic;
+        }
       `}</style>
     </div>
   )
+}
+
+export async function getStaticProps() {
+  const res = await fetchEntries()
+  const posts = await res
+    .filter((post) => {
+      return post.sys.contentType.sys.id === 'blogPost'
+    })
+    .map((post) => {
+      return post.fields
+    })
+
+  return {
+    props: {
+      posts,
+    },
+  }
 }

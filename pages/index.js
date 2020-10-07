@@ -48,7 +48,10 @@ export default function Home({ posts }) {
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
             Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
         }
-
+        img {
+          max-width: 100%;
+          height: auto;
+        }
         * {
           box-sizing: border-box;
         }
@@ -76,6 +79,8 @@ export async function getStaticProps() {
     .map((post) => {
       return post.fields
     })
+
+  console.log(posts)
 
   return {
     props: {

@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import Blockquote from './Blockquote'
+import Link from 'next/link'
 
 function Post({ post }) {
   const { slug, title, body, publishDate, relatedBlogPosts, components } = post
@@ -40,9 +41,13 @@ function Post({ post }) {
          {relatedBlogPosts.map((post) => {
           return (
            <div key={post.fields.publishDate}>
-            <h3>{post.fields.title}</h3>
-            <p>{post.fields.description}</p>
-            <code>{post.fields.slug}</code>
+             <Link href={`/blog/${encodeURIComponent(post.fields.slug)}`} post={post}>
+               <a>
+                <h3>{post.fields.title}</h3>
+                <p>{post.fields.description}</p>
+                <code>{post.fields.slug}</code>
+              </a>
+            </Link>
            </div>
           )
          })}

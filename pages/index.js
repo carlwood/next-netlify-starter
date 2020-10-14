@@ -80,8 +80,6 @@ export async function getStaticProps() {
       return post.fields
     })
 
-  console.log(posts)
-
   return {
     props: {
       posts,

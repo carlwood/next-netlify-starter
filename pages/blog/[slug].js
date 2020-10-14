@@ -3,11 +3,21 @@ import Header from '@components/Header'
 import Footer from '@components/Footer'
 
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
-export default function BlogPost({ post }) {
+import ReactMarkdown from 'react-markdown'
+import Blockquote from '../../components/Blockquote'
+
+export default function BlogPost({ posts }) {
   const router = useRouter()
   const { slug } = router.query
-  console.log(router)
+
+  const post = posts
+    .filter((p) => {
+      return p.slug === slug
+    })[0];
+
+  console.log({ post })
 
   return (
     <div className="container">
@@ -17,8 +27,51 @@ export default function BlogPost({ post }) {
       </Head>
 
       <main>
-        <Header title="Blog" />
-        <h2>{slug}</h2>
+        <Header title={post.slug} />
+
+        {post.slug}
+
+        <div className="text">
+          <ReactMarkdown source={post.body} />
+
+          {post.components &&
+            <>
+            {post.components.map((component) => {
+
+              const { id } = component.sys.contentType.sys
+
+              if (id === 'blockquote') {
+                return (
+                  <Blockquote quote={component.fields.quoteText} author={component.fields.quoteAuthor} />
+                )
+              }
+
+            })}
+            </>
+          }
+        </div>
+
+        { post.relatedBlogPosts &&
+        <>
+          <h2>Related blog posts</h2>
+          <ul>
+          {post.relatedBlogPosts.map((post) => {
+            return (
+            <div key={post.fields.publishDate}>
+              <Link href={`/blog/${encodeURIComponent(post.fields.slug)}`}>
+                <a>
+                  <h3>{post.fields.title}</h3>
+                  <p>{post.fields.description}</p>
+                  <code>{post.fields.slug}</code>
+                </a>
+              </Link>
+            </div>
+            )
+          })}
+          </ul>
+        </>
+        }
+
       </main>
 
       <Footer />

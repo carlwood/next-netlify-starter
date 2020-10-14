@@ -9,51 +9,16 @@ function Post({ post }) {
 
   return (
     <article className="post">
-      <img alt={description} src={`https:${file.url}`} width={width} height={height} />
+      {/* <img alt={description} src={`https:${file.url}`} width={width} height={height} /> */}
       <header>
-        <h2>{title}</h2>
-        <code>slug: {slug}</code>
-        <p>Posted {publishDate}</p>
+        <Link href={`/blog/${encodeURIComponent(slug)}`}>
+          <a>
+            <h2>{title}</h2>
+            <code>slug: {slug}</code>
+            <p>Posted {publishDate}</p>
+          </a>
+        </Link>
       </header>
-      <div className="text">
-        <ReactMarkdown source={body} />
-
-        {components &&
-          <>
-          {components.map((component) => {
-
-            const { id } = component.sys.contentType.sys
-
-            if (id === 'blockquote') {
-              return (
-                <Blockquote quote={component.fields.quoteText} author={component.fields.quoteAuthor} />
-              )
-            }
-
-          })}
-          </>
-        }
-      </div>
-      { relatedBlogPosts &&
-       <>
-        <h2>Related blog posts</h2>
-        <ul>
-         {relatedBlogPosts.map((post) => {
-          return (
-           <div key={post.fields.publishDate}>
-             <Link href={`/blog/${encodeURIComponent(post.fields.slug)}`} post={post}>
-               <a>
-                <h3>{post.fields.title}</h3>
-                <p>{post.fields.description}</p>
-                <code>{post.fields.slug}</code>
-              </a>
-            </Link>
-           </div>
-          )
-         })}
-        </ul>
-       </>
-      }
     </article>
   )
 }

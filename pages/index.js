@@ -6,6 +6,8 @@ import Footer from '@components/Footer'
 import Post from '@components/Post'
 
 export default function Home({ posts }) {
+
+  console.log(posts)
   return (
     <div className="container">
       <Head>
@@ -68,21 +70,4 @@ export default function Home({ posts }) {
       `}</style>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  const res = await fetchEntries()
-  const posts = await res
-    .filter((post) => {
-      return post.sys.contentType.sys.id === 'blogPost'
-    })
-    .map((post) => {
-      return post.fields
-    })
-
-  return {
-    props: {
-      posts,
-    },
-  }
 }
